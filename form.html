@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Makes "field" required and digits only.</title>
+<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+ <style>
+ #docs {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+ </style>
+ 
+</head>
+<body>
+<form id="myform">
+First Name:
+  <input type="text" name="first_name" placeholder="First Name*" />
+  <br>
+  <br>
+  
+Last Name:
+  <input type="text" name="last_name" placeholder="Last Name*" />
+  <br>
+  <br>
+  
+Phone ex: (415) 555-2671:
+  <input type="text" name="phone_number" placeholder="Phone*" />
+  <br>
+  <br>
+  
+Age:
+  <input type="text" name="age" placeholder="Age*" />
+  <br>
+  <br>
+
+Gender:
+	<input type="radio" name="gender" value="m" /> MALE
+	<input type="radio" name="gender" value="f"/>FEMALE
+	<input type="radio" name="gender" value="o"/>OTHERS
+    <br>
+    <br>
+	
+Nationality-Bangladeshi(yes/no):
+	<input type="checkbox" name="bangladeshi" value="y" /> Yes
+	<input type="checkbox" name="bangladeshi" value="n"/>No
+	<br>
+	<br>
+	
+City: <p>
+	  <select name='item'  size='1'>
+	  <option value=''>Select ...</option>
+	  <option value='Avocado'>Avocado</option>
+	  <option value='Bell Pepper'>Bell Pepper</option> 
+	  <option value='Bitter Melon'>Bitter Melon</option> 
+	  <option value='Chayote'>Chayote</option>
+	  <option value='Cucumber'>Cucumber</option>
+	  <option value='Ivy'>Ivy</option> Gourd
+	  <option value='Aubergine'>Aubergine</option>
+	  <option value='Olive'>Olive</option> fruit
+	  <option value='Luffa'>Luffa</option>
+	  </select>
+	  </p>
+	  <br>
+	  <br>
+	  
+Email:
+     <input type="text" name="email" placeholder="email*" />
+     <br>
+     <br>
+  
+  
+   <br>
+   <input type="submit" />
+</form>
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script>
+$(document).ready(function () {
+
+        jQuery.validator.addMethod("FirstName", function (first_name, element) {
+        first_name = first_name.replace(/\s+/g, "");
+        return this.optional(element) || first_name.length < 29 && first_name.length>1;
+    }, "Please specify a valid first name");
+    
+        jQuery.validator.addMethod("LastName", function (last_name, element) {
+        last_name = last_name.replace(/\s+/g, "");
+        return this.optional(element) || last_name.length < 29 && last_name.length>1;
+    }, "Please specify a valid last name");
+    
+    
+        jQuery.validator.addMethod("phoneUS", function (phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "");
+        return this.optional(element) || phone_number.length > 9 && phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+    }, "Please specify a valid phone number");
+    
+    
+        jQuery.validator.addMethod("age_num", function (age, element) {
+        age = age.replace(/\s+/g, "");
+        return this.optional(element) || age.length < 4 && age.match(/^[]?\d+$/);
+    }, "Please specify a valid age number");
+	
+	
+	    jQuery.validator.addMethod("GENDER", function (gender, element) {
+        gender = gender.replace(/\s+/g, "");
+        return this.optional(element) || $('input[type=radio][name=gender]:checked').length>0;
+    }, "Please specify a valid gender (only one)");
+	
+	
+		jQuery.validator.addMethod("Nation", function (bangladeshi, element) {
+        bangladeshi = bangladeshi.replace(/\s+/g, "");
+        return this.optional(element) || $('input[type=checkbox][name=bangladeshi]:checked').length>0 && $('input[type=checkbox][name=bangladeshi]:checked').length<2;
+    }, "Please specify a valid Nationality (only one)");
+	
+	    jQuery.validator.addMethod("EMAIL", function (email, element) {
+        email = email.replace(/\s+/g, "");
+        return this.optional(element) || email.length < 59 && email.match(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+    }, "Please specify a valid email");
+	
+    
+    
+
+    $('#myform').validate({ // initialize the plugin
+        rules: {
+             first_name: {
+                required: true,
+                FirstName: true
+            },
+            
+                last_name: {
+                required: true,
+                LastName: true
+            },
+        
+            phone_number: {
+                required: true,
+                phoneUS: true
+            },
+            
+             age: {
+                required: true,
+                age_num: true,
+                min: 18,
+                max: 130
+            },
+			
+			 gender: {
+                required: true,
+                GENDER: true
+
+            },
+			 bangladeshi: {
+                required: true,
+                Nation: true
+
+            },
+			
+			item: 
+            {
+            required: true
+            },
+			
+			email: 
+            {
+            required: true,
+			EMAIL: true
+		    }
+			
+			
+        },
+        submitHandler: function (form) { // for demo
+            alert('valid form submitted'); // for demo
+            return false; // for demo
+        }
+    });
+
+});
+</script>
+</body>
+</html>
